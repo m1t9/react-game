@@ -18,6 +18,7 @@ interface IState {
   value: string | number | null,
   x: number,
   y: number,
+  aviable: boolean,
 }
 
 class Cell extends React.Component<ICell, IState> {
@@ -27,8 +28,13 @@ class Cell extends React.Component<ICell, IState> {
       value: null,
       x: props.x,
       y: props.y,
+      aviable: true,
     }
   }
+
+  // clickHandler() {
+    
+  // }
 
   render() {
     return (
@@ -36,11 +42,19 @@ class Cell extends React.Component<ICell, IState> {
         className="cell"
         key={this.state.x * CONSTANTS.FIELD_SIZE + this.state.y}
         onClick={() => {
-          const figure: string = currnetPlayer ? 'X' : 'O';
-          this.setState({value: figure});
-          board.setItem(this.state.x, this.state.y, figure);
-          console.log(board.checkWinner());
-          currnetPlayer = !currnetPlayer;
+          if (this.state.aviable && board.checkWinner().figure === 'n') {
+            const figure: string = currnetPlayer ? 'X' : 'O';
+            this.setState({value: figure});
+            board.setItem(this.state.x, this.state.y, figure);
+            // console.log(board.checkWinner());
+            currnetPlayer = !currnetPlayer;
+            this.setState({aviable: !this.state.aviable});
+            
+            if (board.checkWinner().figure !== 'n') alert(`Winner: ${board.checkWinner().figure}`);
+          } else {
+            return;
+          }
+          
         }}
       >
         {this.state.value}
