@@ -12,6 +12,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 100px;
+  background-color: rgb(42, 104, 90);
 }
 
 code {
@@ -20,6 +21,7 @@ code {
 }
 
 .cell {
+  background-color: rgb(212, 212, 212);
   height: 10rem;
   width: 10rem;
 
@@ -30,12 +32,13 @@ code {
   border: 6px solid rgb(0, 0, 0);
   cursor: pointer;
 
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.5) ;
   /* transition: all 3s; */
   
 }
 
 .insert {
-  animation: fadeIn ease 1s;
+  animation: fadeIn ease 0.5s;
 }
 
 @keyframes fadeIn {
@@ -49,7 +52,7 @@ code {
 }
 
 .cell:hover{
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(40, 169, 255, 0.4);
   transition: 0.5s;
 }
 
@@ -57,7 +60,7 @@ code {
   /* background-color: #2196F3; */
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 0.2rem;
+  grid-gap: 0.5rem;
   /* padding: 5rem; */
   width: 32rem;
   height: 8.5rem;

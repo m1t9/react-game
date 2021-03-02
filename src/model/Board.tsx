@@ -27,11 +27,23 @@ export class Board {
     }
   }
 
-  setItem(xCoord: number, yCoord: number, item: string): void {
+  setItem(item: string, xCoord: number, yCoord: number): void {
     if (this.gameBoard[xCoord][yCoord].value !== CONSTANTS.X_FIGURE
       && this.gameBoard[xCoord][yCoord].value !== CONSTANTS.Y_FIGURE) {
       this.gameBoard[xCoord][yCoord].value = item;
     }
+  }
+
+  computerStep(figure: string) {
+    let randX = Math.floor(Math.random() * 3);
+    let randY = Math.floor(Math.random() * 3);
+
+    while (this.gameBoard[randX][randY].value === 'X' || this.gameBoard[randX][randY].value === 'O') {
+      randX = Math.floor(Math.random() * 3);
+      randY = Math.floor(Math.random() * 3);
+    }
+
+    this.gameBoard[randX][randY].value = figure;
   }
 
   checkWinner(): winner {
