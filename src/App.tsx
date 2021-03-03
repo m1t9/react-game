@@ -6,6 +6,6 @@ const App: React.FunctionComponent = () => {
   return (
     <BoardComp />
   );
-}
+};
 
 export default App;

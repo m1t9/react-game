@@ -10,8 +10,8 @@ body {
   font-family: 'Thintel';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-shadow: 4px 2px rgba(219, 219, 219, 0.5);
-  background-color: rgb(13, 124, 98);
+  text-shadow: 3px 2px rgba(219, 219, 219, 0.5);
+  background-color: rgb(16, 129, 110);
   min-height: 100vh;
 }
 
@@ -44,6 +44,7 @@ body {
   cursor: pointer;
 
   box-shadow: 4px 5px rgba(0, 0, 0, 0.3) ;
+  transition: 0.5s;
 }
 
 .insert {
@@ -93,7 +94,7 @@ body {
 }
 
 .footer {
-  font-size: 50px;
+  font-size: 40px;
   display: flex;
   justify-content: center;
 }
@@ -120,7 +121,15 @@ body {
   font-family: 'Thintel';
   border: 3px solid rgb(0, 0, 0);
   box-shadow: 4px 5px rgba(0, 0, 0, 0.3);
+  background-color: rgb(212, 212, 212);
+
   margin-bottom: 1rem;
+  transition: 0.5s;
+}
+
+.funcButton:hover {
+  background-color: rgba(40, 169, 255, 0.4);
+  transition: 0.5s;
 }
 
 .buttonBox {
@@ -130,5 +139,11 @@ body {
 
 .win {
   transition: 0.5s;
-  background-color: rgb(193, 109, 204);
+  background-color: rgb(16, 129, 110);
+}
+
+.info {
+  margin-top: 0;
+  font-size: 25px;
+  text-shadow: none;
 }

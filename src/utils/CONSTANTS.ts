@@ -4,4 +4,4 @@ export const CONSTANTS: any = {
   O_FIGURE: 'O',
   TIE: 't',
   NONE: 'n',
-}
+};
