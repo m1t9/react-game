@@ -21,20 +21,22 @@ let gameWins: number = +(localStorage.getItem('gameWins') || 0);
 let gameLose: number =  +(localStorage.getItem('gameLose') || 0);
 let gameTies: number =  +(localStorage.getItem('gameLose') || 0);
 
-// function checkIncludes(arr: any, x: number, y: number) {
-//   arr.forEach((item: number[]) => {
-//     if (item[0] === x && item[1] === y) {
-//       return true;
-//     }
-//   })
-//   return false;
-// }
+function checkIncludes(arr: [], x: number, y: number) {
+  let answ: boolean = false;
+  arr.forEach((item: number[]) => {
+    if (item[0] === x && item[1] === y) {
+      answ =  true;
+    }
+  })
+  return answ;
+}
 
 const Cell: React.FunctionComponent<CellProps> = (props: any) => {
   return (
     <div
-      // className={`${checkIncludes([[1,1]], 1, 1) ? 'aaa' : (props.aviable ? (props.win === CONSTANTS.NONE ? 'cell aviable' : 'cell') : 'cell insert')}`}
-      className={`${props.aviable ? (props.win === CONSTANTS.NONE ? 'cell aviable' : 'cell') : 'cell insert'}`}
+      className={`${checkIncludes(props.winCells, props.x, props.y) ? 'cell win' 
+        : (props.aviable ? (props.win === CONSTANTS.NONE ? 'cell aviable' : 'cell') 
+        : 'cell insert')}`}
       onClick={props.onClick}
     >
       {props.value}

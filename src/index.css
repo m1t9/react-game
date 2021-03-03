@@ -48,6 +48,7 @@ body {
 
 .insert {
   animation: fadeIn ease 0.5s;
+  cursor: default;
 }
 
 @keyframes fadeIn {
@@ -101,6 +102,17 @@ body {
   text-decoration: none;
 }
 
+.footerLogo {
+  display: inline-block;
+  margin-left: 1rem;
+  width: 5rem;
+  height: 2rem;
+  background: url('./assets/rs_school_js.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+
 .funcButton {
   cursor: pointer;
   width: 8rem;
@@ -114,4 +126,9 @@ body {
 .buttonBox {
   display: flex;
   flex-direction: column;
+}
+
+.win {
+  transition: 0.5s;
+  background-color: rgb(193, 109, 204);
 }
