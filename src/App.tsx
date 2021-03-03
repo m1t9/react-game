@@ -4,9 +4,7 @@ import { BoardComp } from './components/BoardComp';
 
 const App: React.FunctionComponent = () => {
   return (
-    <div className="game_board">
-      <BoardComp />
-    </div>
+    <BoardComp />
   );
 }
 

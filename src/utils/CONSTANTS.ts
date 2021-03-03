@@ -1,5 +1,7 @@
 export const CONSTANTS: any = {
   FIELD_SIZE: 3,
-  X_FIGURE: 'x',
-  Y_FIGURE: 'y',
+  X_FIGURE: 'X',
+  O_FIGURE: 'O',
+  TIE: 't',
+  NONE: 'n',
 }

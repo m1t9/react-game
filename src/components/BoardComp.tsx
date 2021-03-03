@@ -2,95 +2,39 @@ import React, { useState } from 'react';
 import { CONSTANTS } from '../utils/CONSTANTS';
 import { Board } from '../model/Board';
 
-// renderBoard: React.FunctionComponent = () => 
-
-const board: Board = new Board();
-
 let currnetPlayer: boolean = true;
-// let status: string = `Current player: X`
-
-interface ICell {
-  value: string | number,
-  x: number,
-  y: number,
-  // key: string,
-  // onClick: React.MouseEventHandler<HTMLButtonElement>;
-}
 
 interface CellProps {
   value: string | number | null,
   x: number,
   y: number,
   aviable: boolean,
+  win: string,
+  winCells: any,
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-interface IState {
-  value: string | number | null,
-  x: number,
-  y: number,
-  aviable: boolean,
-}
+let board: Board = new Board();
+const savedBoard: string = localStorage.getItem('board') || JSON.stringify(board.gameBoard);
+board.gameBoard = JSON.parse(savedBoard);
+let gameWins: number = +(localStorage.getItem('gameWins') || 0);
+let gameLose: number =  +(localStorage.getItem('gameLose') || 0);
+let gameTies: number =  +(localStorage.getItem('gameLose') || 0);
 
-// __________________________________________________________________________________________________________________________________________________________
-
-// class Cell extends React.Component<ICell, IState> {
-//   constructor(props: ICell) {
-//     super(props);
-//     this.state = {
-//       value: null,
-//       x: props.x,
-//       y: props.y,
-//       aviable: true,
+// function checkIncludes(arr: any, x: number, y: number) {
+//   arr.forEach((item: number[]) => {
+//     if (item[0] === x && item[1] === y) {
+//       return true;
 //     }
-//     this.clickHandler = this.clickHandler.bind(this);
-//   }
-
-//   // clickHandler() {
-
-//   // }
-//   clickHandler() {
-//     if (this.state.aviable && board.checkWinner().figure === 'n') {
-//       const figure: string = currnetPlayer ? 'X' : 'O';
-//       this.setState({value: figure});
-//       board.setItem(this.state.x, this.state.y, figure);
-//       // console.log(board.checkWinner());
-//       currnetPlayer = !currnetPlayer;
-//       this.setState({aviable: !this.state.aviable});
-//       // board.computerStep('K');
-//       // console.log(this);
-
-//       // if (board.checkWinner().figure !== 'n') alert(`Winner: ${board.checkWinner().figure}`);
-//     } else {
-//       // console.log('wow');
-//       return;
-//     }
-//   }
-
-//   render() {
-//     const completed: string = board.checkWinner().figure === 'n' ? 'cell' : 'cell completed ex4'; 
-//     return (
-//       <div
-//         className={`${this.state.aviable ? completed : 'cell insert'}`}
-//         // className="cell"
-//         // key={this.state.x * CONSTANTS.FIELD_SIZE + this.state.y}
-//         onClick={this.clickHandler}
-//         // key={this.state.x + this.state.y}
-//       >
-//         {this.state.value}
-//       </div>
-//     );
-//   }
+//   })
+//   return false;
 // }
-// __________________________________________________________________________________________________________________________________________________________
 
-// function Cell(props: {}): React.FunctionComponent<any> {
 const Cell: React.FunctionComponent<CellProps> = (props: any) => {
-  // console.log(props);
   return (
     <div
-      // className="cell"
-      className={`${props.aviable ? 'cell' : 'cell insert'}`}
+      // className={`${checkIncludes([[1,1]], 1, 1) ? 'aaa' : (props.aviable ? (props.win === CONSTANTS.NONE ? 'cell aviable' : 'cell') : 'cell insert')}`}
+      className={`${props.aviable ? (props.win === CONSTANTS.NONE ? 'cell aviable' : 'cell') : 'cell insert'}`}
       onClick={props.onClick}
     >
       {props.value}
@@ -99,36 +43,71 @@ const Cell: React.FunctionComponent<CellProps> = (props: any) => {
 }
 
 export class BoardComp extends React.Component<any, any> {
+  boardRef: any;
+
   constructor(props: any) {
     super(props);
     this.state = {
-      status: `Current player: X`,
+      status: `Current player: ${CONSTANTS.X_FIGURE}`,
       isNext: true,
       res: this.getBoard(),
+      win: board.checkWinner().figure,
+      lose: 0,
+      tie: 0,
     }
+    this.boardRef = React.createRef();
     this.changeFigureState = this.changeFigureState.bind(this);
+    this.newGame = this.newGame.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
-  // repBoard: any[] = [];
-  // res = this.getBoard();
+  newGame() {
+    board = new Board();
+    localStorage.setItem('board', JSON.stringify(board.gameBoard));
+    currnetPlayer = true;
+    this.setState({ res: this.getBoard() });
+  }
+
+  reset() {
+    gameWins = 0;
+    gameLose = 0;
+    gameTies = 0;
+    this.newGame();
+  }
 
   renderCell(value: number | string, x: number, y: number, aviable: boolean) {
-    // return <Cell value={value} x={x} y={y} onClick={() => {console.log('wow')}}/>
     return <Cell
-      value={value !== 'X' && value !== 'O' ? '' : value}
+      value={value !== CONSTANTS.X_FIGURE && value !== CONSTANTS.O_FIGURE ? '' : value}
       x={x}
       y={y}
       aviable={aviable}
+      win={board.checkWinner().figure}
+      winCells={board.checkWinner().winCells}
       onClick={() => {
-        if (aviable) {
-          board.setItem(currnetPlayer ? 'X' : 'O', x, y);
-          setTimeout(() => {
-            board.computerStep('O');
-          }, 10);
+        if (aviable && board.checkWinner().figure === CONSTANTS.NONE) {
+          board.setItem(currnetPlayer ? CONSTANTS.X_FIGURE : CONSTANTS.O_FIGURE, x, y);
+          let winner: string = board.checkWinner().figure;
+          if (winner === CONSTANTS.NONE) {
+            setTimeout(() => {
+              board.computerStep(CONSTANTS.O_FIGURE);
+              winner = board.checkWinner().figure;
+              if (winner === 'O') {
+                gameLose += 1;
+                localStorage.setItem('gameLose', gameLose.toString());
+              }
+            }, 10);
+          } else {
+            if (winner === CONSTANTS.X_FIGURE) {
+              gameWins += 1;
+              localStorage.setItem('gameWins', gameWins.toString());
+            } else if (winner === CONSTANTS.TIE) {
+              gameTies += 1;
+              localStorage.setItem('gameTies', gameTies.toString());
+            }
+          }
         }
       }}
     />
-    // return <Cell />
   }
 
   getBoard(): any[] {
@@ -139,8 +118,7 @@ export class BoardComp extends React.Component<any, any> {
       row.forEach((item: any) => {
         {
           res.push(
-            // item.value !== 'X' && item.value !== 'O' ? this.renderCell(item.value, item.x, item.y) : this.renderCell('', item.x, item.y)
-            this.renderCell(item.value, item.x, item.y, item.value !== 'X' && item.value !== 'O')
+            this.renderCell(item.value, item.x, item.y, item.value !== CONSTANTS.X_FIGURE && item.value !== CONSTANTS.O_FIGURE)
           )
         }
       })
@@ -150,33 +128,62 @@ export class BoardComp extends React.Component<any, any> {
   }
 
   changeFigureState() {
-    this.setState({ res: this.getBoard() });
+    this.setState({ isNext: !this.state.isNext });
+    this.setState({ res: this.getBoard(), win: board.checkWinner().figure });
 
     setTimeout(() => {
       this.setState({ res: this.getBoard() });
       this.setState({ isNext: !this.state.isNext });
-      this.setState({ isNext: !this.state.isNext });
-  }, 500);
-    // console.log(this)
+    }, 500);
+
   }
 
   render() {
+
     let status: string;
     const winner = board.checkWinner().figure;
-    if (winner !== 'n') {
-      status = `Winner: ${winner}`
+    if (winner !== CONSTANTS.NONE) {
+      if (winner === CONSTANTS.TIE) {
+        status = 'TIE';
+      } else {
+        status = `Winner: ${winner}`
+      }
     } else {
-      status = this.state.isNext ? 'Current player: X' : 'Current player: O';
+      status = this.state.isNext ? `Current player: ${CONSTANTS.X_FIGURE}` : `Current player: ${CONSTANTS.O_FIGURE}`;
     }
 
     return (
-      <div>
+      
+      <div
+        className="gameBoard"
+        ref={this.boardRef}
+      >
         <div className="status">{status}</div>
+        <div className="resultsBlock">
+          <div className="res">{`Wins: ${gameWins}`}</div>
+          <div className="res">{`Lose: ${gameLose}`}</div>
+          <div className="res">{`Tie: ${gameTies}`}</div>
+        </div>
         <div
           onClick={this.changeFigureState}
           key="board"
-          className="board">
-            {this.state.res}
+          className="board"
+        >
+          {this.state.res}
+        </div>
+        <div className="buttonBox">
+          <button
+            className="funcButton"
+            onClick={this.newGame}
+          >
+            New game
+        </button>
+        <button
+          className="funcButton"
+          onClick={this.reset}
+        >
+          Reset
+        </button>
         </div>
       </div>
     )
