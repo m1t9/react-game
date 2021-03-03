@@ -147,3 +147,35 @@ body {
   font-size: 25px;
   text-shadow: none;
 }
+
+@media screen and (max-width: 510px) {
+  .cell {
+    font-size: 120px;
+    height: 5.5rem;
+    width: 5.5rem;
+  }
+
+  .footer {
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .footerLogo {
+    width: 4rem;
+    height: 2rem;
+  }
+
+  .res {
+    font-size: 40px;
+  }
+
+  .status {
+    margin-top: 0rem;
+    font-size: 50px;
+  }
+
+  .resultsBlock {
+    max-width: 300px;
+  }
+}
