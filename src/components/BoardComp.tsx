@@ -10,7 +10,7 @@ interface CellProps {
   y: number,
   aviable: boolean,
   win: string,
-  winCells: any,
+  winCells: [],
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
