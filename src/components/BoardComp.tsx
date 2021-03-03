@@ -16,18 +16,21 @@ interface CellProps {
 
 let board: Board = new Board();
 const savedBoard: string = localStorage.getItem('board') || JSON.stringify(board.gameBoard);
-board.gameBoard = JSON.parse(savedBoard);
 let gameWins: number = +(localStorage.getItem('gameWins') || 0);
 let gameLose: number = +(localStorage.getItem('gameLose') || 0);
 let gameTies: number = +(localStorage.getItem('gameLose') || 0);
 
+board.gameBoard = JSON.parse(savedBoard);
+
 function checkIncludes(arr: [], x: number, y: number) {
   let answ: boolean = false;
+
   arr.forEach((item: number[]) => {
     if (item[0] === x && item[1] === y) {
       answ = true;
     }
-  })
+  });
+
   return answ;
 }
 
@@ -55,6 +58,7 @@ export class BoardComp extends React.Component<any, any> {
       lose: 0,
       tie: 0,
     }
+
     this.changeFigureState = this.changeFigureState.bind(this);
     this.newGame = this.newGame.bind(this);
     this.reset = this.reset.bind(this);
@@ -78,7 +82,6 @@ export class BoardComp extends React.Component<any, any> {
   }
 
   renderCell(value: number | string, x: number, y: number, aviable: boolean) {
-
     return <Cell
       value={value !== CONSTANTS.X_FIGURE && value !== CONSTANTS.O_FIGURE ? '' : value}
       x={x}
@@ -86,14 +89,18 @@ export class BoardComp extends React.Component<any, any> {
       aviable={aviable}
       win={board.checkWinner().figure}
       winCells={board.checkWinner().winCells}
+      key={`${x}${y}`}
       onClick={() => {
         if (aviable && board.checkWinner().figure === CONSTANTS.NONE) {
           board.setItem(currnetPlayer ? CONSTANTS.X_FIGURE : CONSTANTS.O_FIGURE, x, y);
+
           let winner: string = board.checkWinner().figure;
+
           if (winner === CONSTANTS.NONE) {
             setTimeout(() => {
               board.computerStep(CONSTANTS.O_FIGURE);
               winner = board.checkWinner().figure;
+
               if (winner === 'O') {
                 gameLose += 1;
                 localStorage.setItem('gameLose', gameLose.toString());
@@ -114,16 +121,13 @@ export class BoardComp extends React.Component<any, any> {
   }
 
   getBoard(): any[] {
-
     const res: any[] = [];
 
     board.gameBoard.forEach((row) => {
       row.forEach((item: any) => {
-        {
-          res.push(
-            this.renderCell(item.value, item.x, item.y, item.value !== CONSTANTS.X_FIGURE && item.value !== CONSTANTS.O_FIGURE)
-          )
-        }
+        res.push(
+          this.renderCell(item.value, item.x, item.y, item.value !== CONSTANTS.X_FIGURE && item.value !== CONSTANTS.O_FIGURE)
+        )
       })
     });
 
@@ -186,8 +190,8 @@ export class BoardComp extends React.Component<any, any> {
           >
             Reset
         </button>
-        <p className="info">
-          Press 'F' to fullscreen
+          <p className="info">
+            Press 'F' to fullscreen
         </p>
         </div>
       </div>
